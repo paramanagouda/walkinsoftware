@@ -23,8 +23,8 @@ export class LoginComponent implements OnInit {
       password: this.loginForm.controls.password.value
     }
     this.apiService.login(loginPayload).subscribe(data => {
-      debugger;
       if(data.responseCode === 200) {
+      	alert(data.message);
         window.localStorage.setItem('token', data.result);
         this.router.navigate(['dashboard']);
       }else {

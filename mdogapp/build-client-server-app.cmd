@@ -10,13 +10,13 @@ start /wait cmd /c "ng build --base-href /mdogapp/"
 
 cd ..
 echo build war file
-REM mvn -f mdog-client-app clean package
-mvn -f mdog-server-app clean package
+start /wait cmd /c "mvn -f mdog-server-app clean package"
 echo build war file process success
 echo remove old war file and temp files from server process 
-rmdir %tomcate_path%\webapps\mdogapp
+rmdir /Q/S %tomcate_path%\webapps\mdogapp
 del %tomcate_path%\webapps\mdogapp.war
-rmdir %tomcate_path%\\work\Catalina\localhost
+rmdir /Q/S %tomcate_path%\work\Catalina\localhost
+rmdir /Q/S %tomcate_path%\logs
 echo Copy war file to deployment location
 copy mdog-server-app\target\mdogapp.war %tomcate_path%\webapps
 cd %tomcate_path%\bin\

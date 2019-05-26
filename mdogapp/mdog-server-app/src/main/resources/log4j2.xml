@@ -12,8 +12,8 @@
         </Console>
 
         <!-- Rolling File Appender -->
-        <RollingFile name="FileAppender" fileName="${catalina.home}/logs/mdog-app.log"
-                     filePattern="${catalina.home}/logs/mdog-app-%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="FileAppender" fileName="../logs/mdog-app.log"
+                     filePattern="../logs/mdog-app-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout>
                 <Pattern>${LOG_PATTERN}</Pattern>
             </PatternLayout>
@@ -24,8 +24,8 @@
             <DefaultRolloverStrategy max="10"/>
         </RollingFile>
         
-        <RollingFile name="SpringLogAppender" fileName="${catalina.home}/logs/spring-mdog-app.log"
-            filePattern="${catalina.home}/logs/spring-mdog-app-%d{yyyy-MM-dd}-%i.log" >
+        <RollingFile name="SpringLogAppender" fileName="../logs/spring-mdog-app.log"
+            filePattern="../logs/spring-mdog-app-%d{yyyy-MM-dd}-%i.log" >
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
                 <SizeBasedTriggeringPolicy size="19500KB" />
