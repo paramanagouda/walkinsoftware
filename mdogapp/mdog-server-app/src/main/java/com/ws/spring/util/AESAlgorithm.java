@@ -12,8 +12,6 @@ import javax.crypto.spec.SecretKeySpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ws.spring.controller.HomeController;
-
 public class AESAlgorithm {
 
 	private static SecretKeySpec keySpec;

@@ -41,7 +41,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-aligh: center\">\n<h1>\n  Mdog Application\n  </h1>\n</div>\n\n\n<router-outlet></router-outlet>\n"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-aligh: center\">\n<h1>\n  Mdog Application 111\n  </h1>\n</div>\n\n\n<router-outlet></router-outlet>\n"
 
 /***/ }),
 
@@ -198,7 +198,7 @@ var ApiService = /** @class */ (function () {
         this.baseUrl = 'http://localhost:8080/';
     }
     ApiService.prototype.login = function (loginPayload) {
-        return this.http.post('/mdogapp/home/v1/userLogin', loginPayload);
+        return this.http.post('/user/v1/userLogin', loginPayload);
     };
     ApiService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),

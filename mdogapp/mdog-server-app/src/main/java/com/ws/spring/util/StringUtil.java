@@ -3,6 +3,7 @@ package com.ws.spring.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Map;
 import java.util.Random;
 
 public class StringUtil {
@@ -34,5 +35,21 @@ public class StringUtil {
 		} catch (UnsupportedEncodingException e) {
 			return "Issue while decoding" + e.getMessage();
 		}
+	}
+
+	public static boolean checkNullOrEmpty(String str) {
+		if (null == str || "".equals(str) || str.length() == 0)
+			return Boolean.TRUE;
+		return false;
+	}
+	
+	public static String messageFormat(String cTemplate,Map<String, String> replacements) {
+
+		if (!AppUtil.isObjectEmpty(cTemplate)) {
+			for (Map.Entry<String, String> entry : replacements.entrySet()) {
+				cTemplate = cTemplate.replace("{{" + entry.getKey() + "}}", entry.getValue());
+			}
+		}
+		return cTemplate;
 	}
 }

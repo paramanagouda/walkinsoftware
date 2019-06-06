@@ -5,38 +5,40 @@ public interface Constants {
 	/**
 	 * User Role description
 	 */
-	final int ROLE_ID_SUPERADMIN = 1;
-	final int ROLE_ID_ADMIN = 2;
-	final int ROLE_ID_USER = 3;
+	 int ROLE_ID_SUPERADMIN = 1;
+	 int ROLE_ID_ADMIN = 2;
+	 int ROLE_ID_USER = 3;
 	
 	/**
 	 * isActive parameter descriptions
 	 */
-	final int REGISTERED = 0;
-	final int ACTIVE = 1;
-	final int BLOCKED = 2;
+	 int REGISTERED = 0;
+	 int ACTIVE = 1;
+	 int BLOCKED = 2;
 	
 	/** The Constant BLANK. */
-	final String BLANK = "";
+	 String BLANK = "";
 	
 	/** The Constant COLON. */
-	final String COLON = " : ";
+	 String COLON = " : ";
 	
 	/** The Constant DASH. */
-	final String DASH = " - ";
+	 String DASH = " - ";
 	
 	/** The Constant KEY_TXNID. */
-	final String KEY_TXNID = "TXNID";
+	 String KEY_TXNID = "TXNID";
 	
 	/** The Constant XPATH_TXNID. */
-	final String XPATH_TXNID = "//transcationId";
+	 String XPATH_TXNID = "//transcationId";
 	
 	/** The Constant ENTRY. */
-	final String ENTRY = "Entry";
+	 String ENTRY = "Entry";
 	
 	/** The Constant EXIT. */
-	final String EXIT = "Exit";
+	 String EXIT = "Exit";
 	
 	/** COnstant int numbers */
-	final int INT_SIX = 6;
+	 int INT_SIX = 6;
+	
+	 String REGISTRATION_STR = "REGISTRATION";
 }

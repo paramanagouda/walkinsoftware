@@ -1,16 +1,12 @@
 package com.ws.spring.model;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -22,7 +18,19 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "t_ws_user")
 @EntityListeners(AuditingEntityListener.class)
-public class UserDetails implements Serializable{
+
+/*
+ * All together now: A shortcut for @ToString, @EqualsAndHashCode, @Getter on
+ * all fields, and @Setter on all non-final fields,
+ * and @RequiredArgsConstructor!
+ */
+
+public class UserDetails implements Serializable {
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue
@@ -38,10 +46,12 @@ public class UserDetails implements Serializable{
 
 	private String mobileNumber;
 
+	private String otp;
+
 	// Bar code will be contain more info
 	private String barcode;
 
-	private String permnentMobileNumber;
+	private String secondaryMobileNumber;
 
 	@OneToOne
 	private Role role;
@@ -55,16 +65,13 @@ public class UserDetails implements Serializable{
 	@CreationTimestamp
 	private LocalDateTime insertedDate;
 
-	@UpdateTimestamp
-	private LocalDateTime updatedDate;
-
 	public UserDetails() {
-
+		super();
 	}
 
 	public UserDetails(Long id, String fullName, String userName, String password, String emailId, String mobileNumber,
-			String barcode, String permnentMobileNumber, Role role, int isActive, String hashcode, String imeiNum,
-			LocalDateTime insertedDate, LocalDateTime updatedDate) {
+			String otp, String barcode, String secondaryMobileNumber, Role role, int isActive, String hashcode,
+			String imeiNum, LocalDateTime insertedDate, LocalDateTime updatedDate) {
 		super();
 		this.id = id;
 		this.fullName = fullName;
@@ -72,8 +79,9 @@ public class UserDetails implements Serializable{
 		this.password = password;
 		this.emailId = emailId;
 		this.mobileNumber = mobileNumber;
+		this.otp = otp;
 		this.barcode = barcode;
-		this.permnentMobileNumber = permnentMobileNumber;
+		this.secondaryMobileNumber = secondaryMobileNumber;
 		this.role = role;
 		this.isActive = isActive;
 		this.hashcode = hashcode;
@@ -85,10 +93,13 @@ public class UserDetails implements Serializable{
 	@Override
 	public String toString() {
 		return String.format(
-				"UserDetails [id=%s, fullName=%s, userName=%s, emailId=%s, mobileNumber=%s,  permnentMobileNumber=%s, role=%s, isActive=%s, imeiNum=%s, insertedDate=%s, updatedDate=%s]",
-				id, fullName, userName, emailId, mobileNumber, permnentMobileNumber, role,
-				isActive, imeiNum, insertedDate, updatedDate);
+				"UserDetails [id=%s, fullName=%s, userName=%s, password=%s, emailId=%s, mobileNumber=%s, otp=%s, barcode=%s, secondaryMobileNumber=%s, role=%s, isActive=%s, hashcode=%s, imeiNum=%s, insertedDate=%s, updatedDate=%s]",
+				id, fullName, userName, password, emailId, mobileNumber, otp, barcode, secondaryMobileNumber, role,
+				isActive, hashcode, imeiNum, insertedDate, updatedDate);
 	}
+
+	@UpdateTimestamp
+	private LocalDateTime updatedDate;
 
 	public Long getId() {
 		return id;
@@ -138,6 +149,14 @@ public class UserDetails implements Serializable{
 		this.mobileNumber = mobileNumber;
 	}
 
+	public String getOtp() {
+		return otp;
+	}
+
+	public void setOtp(String otp) {
+		this.otp = otp;
+	}
+
 	public String getBarcode() {
 		return barcode;
 	}
@@ -146,14 +165,13 @@ public class UserDetails implements Serializable{
 		this.barcode = barcode;
 	}
 
-	public String getPermnentMobileNumber() {
-		return permnentMobileNumber;
+	public String getSecondaryMobileNumber() {
+		return secondaryMobileNumber;
 	}
 
-	public void setPermnentMobileNumber(String permnentMobileNumber) {
-		this.permnentMobileNumber = permnentMobileNumber;
+	public void setSecondaryMobileNumber(String secondaryMobileNumber) {
+		this.secondaryMobileNumber = secondaryMobileNumber;
 	}
-
 
 	public Role getRole() {
 		return role;
@@ -201,5 +219,6 @@ public class UserDetails implements Serializable{
 
 	public void setUpdatedDate(LocalDateTime updatedDate) {
 		this.updatedDate = updatedDate;
-	}	
+	}
+
 }
