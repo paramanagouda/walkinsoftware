@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.ws.spring.dto.UserDto;
-import com.ws.spring.dto.UserOptBean;
+import com.ws.spring.dto.UserOtpBean;
 import com.ws.spring.exception.ClientResponseBean;
 import com.ws.spring.model.UserDetails;
 import com.ws.spring.service.UserService;
@@ -26,8 +26,8 @@ import com.ws.spring.util.StringUtil;
 
 //@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/user")
-public class UserDetailsController {
+@RequestMapping("/home")
+public class HomeRestController {
 
 	@Autowired
 	UserService userService;
@@ -56,7 +56,9 @@ public class UserDetailsController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public ClientResponseBean userRegistration(@RequestBody UserDetails user) {
 		try {
-
+			if(null == userService.verifyUserOtp(user.getMobileNumber(), user.getOtp())) {
+				return ClientResponseUtil.getUserOptValidationFailed();
+			}
 			UserDetails userRegistration = userService.userRegistration(user);
 			if (null != userRegistration) {
 				return ClientResponseUtil.userRegistrationSuccess();
@@ -90,9 +92,9 @@ public class UserDetailsController {
 	}
 
 	@PostMapping("/v1/generateOtp")
-	public ClientResponseBean generateOtp(@RequestBody UserOptBean userOptBean) {
+	public ClientResponseBean generateOtp(@RequestBody UserOtpBean userOptBean) {
 		try {
-			UserOptBean userOptBeanReturn = null;
+			UserOtpBean userOptBeanReturn = null;
 			if (!StringUtil.checkNullOrEmpty(userOptBean.getActivity())
 					&& Constants.REGISTRATION_STR.equals(userOptBean.getActivity())) {
 				userOptBeanReturn = userService.generateOpt(userOptBean);
@@ -113,8 +115,7 @@ public class UserDetailsController {
 	public ClientResponseBean verifyUserOtp(@RequestParam(name = "userName") String userName,
 			@RequestParam(name = "opt") String otp) {
 		try {
-			// hashCode = StringUtil.decode(hashCode);
-			UserOptBean userOptBean = userService.verifyUserOtp(userName, otp);
+			UserOtpBean userOptBean = userService.verifyUserOtp(userName, otp);
 			if (null != userOptBean) {
 				return ClientResponseUtil.getUserOptValidationSuccess();
 			}
@@ -125,9 +126,9 @@ public class UserDetailsController {
 	}
 
 	@GetMapping("/v1/forgotPassword")
-	public ClientResponseBean forgotPassword(@RequestParam(name = "emailId") String emailId) {
+	public ClientResponseBean forgotPassword(@RequestParam(name = "mobile") String mobile) {
 		try {
-			if (userService.forgotPassword(emailId)) {
+			if (userService.forgotPassword(mobile)) {
 				return ClientResponseUtil.sentOptSucces();
 			}
 			return ClientResponseUtil.sentOptFailed();
