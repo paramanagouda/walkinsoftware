@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} : %m%n%
+        </Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+
+        <!-- Rolling File Appender -->
+        <RollingFile name="FileAppender" fileName="../logs/mdog-app.log"
+                     filePattern="../logs/mdog-app-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+        
+        <RollingFile name="SpringLogAppender" fileName="../logs/spring-mdog-app.log"
+            filePattern="../logs/spring-mdog-app-%d{yyyy-MM-dd}-%i.log" >
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="1"/>
+        </RollingFile>
+
+        <!-- SMTP Appender
+        <SMTP name="MailAppender"
+              subject="Log4j2 Demo [PROD]"
+              to="youremail@example.com"
+              from="log4j2-demo-alerts@example.com"
+              smtpHost="yourSMTPHost"
+              smtpPort="587"
+              smtpUsername="yourSMTPUsername"
+              smtpPassword="yourSMTPPassword"
+              bufferSize="1">
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+        </SMTP>
+         -->
+    </Appenders>
+    <Loggers>
+        <!-- <AsyncLogger name="com.ws.spring.MdogApplication" level="debug"
+                     additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="SpringLogAppender"/>
+        </AsyncLogger> -->
+        
+        <!-- CXF is used heavily by Mule for web services-->
+     <AsyncLogger name="org.apache.cxf" level="WARN" />
+     <!--Apache Commons tend to make a lot of noise which can clutter the log-->
+     <AsyncLogger name="org.apache" level="WARN" />
+     <!-- Reduce startup noise -->
+     <AsyncLogger name="org.springframework.beans.factory" level="WARN" />
+     <!-- Application classes -->
+     <AsyncLogger name="org.ws.spring" level="INFO" />
+     <!-- <AsyncLogger name="com.ws.spring.service" level="INFO"/> -->
+     <!-- Reduce DM verbosity -->
+     <AsyncLogger name="org.jetel" level="WARN" />
+     <AsyncLogger name="Tracking" level="WARN" />
+
+        <Root level="debug">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="SpringLogAppender"/>
+        </Root>
+        
+        <!-- <Logger  name="com.ws.spring.MdogApplication" level="debug">
+            <AppenderRef ref="File-Appender"/>
+        </Logger>
+        <Root level="debug">
+            <AppenderRef ref="Console-Appender"/>
+        </Root> -->
+    </Loggers>
+</Configuration>
