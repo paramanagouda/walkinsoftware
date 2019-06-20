@@ -26,7 +26,7 @@ public class UserOtpBean implements Serializable {
 
 	}
 
-	public UserOtpBean(String userName, String emailId, String mobileNumber, String opt, Date generatedTime,
+	public UserOtpBean(String userName, String emailId, String mobileNumber, String otp, Date generatedTime,
 			String activity) {
 		super();
 		this.userName = userName;
@@ -35,6 +35,13 @@ public class UserOtpBean implements Serializable {
 		this.otp = otp;
 		this.generatedTime = generatedTime;
 		this.activity = activity;
+	}
+
+	@Override
+	public String toString() {
+		return String.format(
+				"UserOtpBean [userName=%s, emailId=%s, mobileNumber=%s, otp=%s, generatedTime=%s, activity=%s]",
+				userName, emailId, mobileNumber, otp, generatedTime, activity);
 	}
 
 	public String getEmailId() {

@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
 @Entity
 @Table(name = "t_ws_user")
 @EntityListeners(AuditingEntityListener.class)
-@ApiModel(description = "All details about the User. ")
+@ApiModel(description = "All details about the User")
 public class UserDetails implements Serializable {
 
 	/**

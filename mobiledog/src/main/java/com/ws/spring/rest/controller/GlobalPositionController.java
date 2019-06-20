@@ -14,22 +14,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.ws.common.util.ClientResponseUtil;
 import com.ws.spring.exception.ClientResponseBean;
 import com.ws.spring.model.GpsTrackingDetails;
 import com.ws.spring.model.SimRemovalDetails;
 import com.ws.spring.service.GpsTrackingService;
 import com.ws.spring.service.SimRemovalDetailsService;
-import com.ws.spring.util.ClientResponseUtil;
 
 import io.swagger.annotations.Api;
 
 @RestController
 @RequestMapping(value = "/gpstracking")
-@Api(value="GPS Management System", description="Operations pertaining to gps in Global Position System")
+@Api(value = "GPS Management System", description = "Operations pertaining to gps in Global Position System")
 public class GlobalPositionController {
 
 	Logger logger = LogManager.getLogger(this.getClass().getName());
-	
+
 	@Autowired
 	SimRemovalDetailsService simRemovalDetailsService;
 

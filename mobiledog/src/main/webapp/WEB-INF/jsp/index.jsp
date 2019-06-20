@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Mobiledog app</title>
+<title>Mobiledog-index</title>
 </head>
 <body>
     Welcome to Mobiledog application : ${date}

@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.ws.spring.dto.EmailBean;
 
-@Component
+@Service
 public class EmailServiceImpl {
 
 	Logger logger = LogManager.getLogger(this.getClass().getName());

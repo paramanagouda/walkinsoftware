@@ -70,7 +70,7 @@
      <AsyncLogger name="org.jetel" level="WARN" />
      <AsyncLogger name="Tracking" level="WARN" />
 
-        <Root level="debug">
+        <Root level="INFO">
             <AppenderRef ref="ConsoleAppender"/>
             <AppenderRef ref="FileAppender"/>
             <AppenderRef ref="SpringLogAppender"/>

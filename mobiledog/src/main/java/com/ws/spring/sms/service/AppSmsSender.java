@@ -8,13 +8,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import com.ws.common.util.StringUtil;
 import com.ws.spring.dto.UserOtpBean;
 import com.ws.spring.model.UserDetails;
-import com.ws.spring.util.StringUtil;
 
-@Component
+@Service
 @PropertySource("classpath:smsconfig.properties")
 public class AppSmsSender {
 

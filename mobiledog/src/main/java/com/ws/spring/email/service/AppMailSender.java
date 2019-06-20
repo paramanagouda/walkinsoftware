@@ -6,13 +6,13 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.ws.spring.dto.EmailBean;
 import com.ws.spring.dto.UserOtpBean;
 import com.ws.spring.model.UserDetails;
 
-@Component
+@Service
 public class AppMailSender {
 
 	Logger logger = LogManager.getLogger(this.getClass().getName());

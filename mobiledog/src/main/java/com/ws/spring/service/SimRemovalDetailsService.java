@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ws.spring.model.SimRemovalDetails;
 import com.ws.spring.repository.SimRemovalDetailsRepository;
-import org.springframework.stereotype.Component;
 
-@Component
+@Service
 public class SimRemovalDetailsService {
 
     @Autowired

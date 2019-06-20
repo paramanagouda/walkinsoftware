@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.ws.spring.util.AppUtil;
+import com.ws.common.util.AppUtil;
 
 public class EmailBean {
 	

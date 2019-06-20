@@ -12,6 +12,7 @@ import com.ws.spring.repository.UserRepository;
 
 @Component
 public class UserValidator implements Validator {
+	
 	@Autowired
 	private UserRepository userRepository;
 
@@ -25,20 +26,22 @@ public class UserValidator implements Validator {
 		UserDto userDto = (UserDto) o;
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
-		if (userDto.getUsername().length() < 6 || userDto.getUsername().length() > 32) {
+		String userName = userDto.getUserName();
+		if (userName.length() < 6 || userName.length() > 32) {
 			errors.rejectValue("username", "Size.userForm.username");
 		}
-		UserDetails userDetails = userRepository.findUserDetailsByUserName(userDto.getUsername());
+		UserDetails userDetails = userRepository.findUserDetailsByUserName(userName);
 		if (userDetails != null) {
 			errors.rejectValue("username", "Duplicate.userForm.username");
 		}
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
-		if (userDto.getPassword().length() < 8 || userDto.getPassword().length() > 32) {
+		String password = userDto.getPassword();
+		if (password.length() < 8 || password.length() > 32) {
 			errors.rejectValue("password", "Size.userForm.password");
 		}
 
-		if (!userDto.getPassword().equals(userDetails.getPassword())) {
+		if (!password.equals(userDetails.getPassword())) {
 			errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
 		}
 	}

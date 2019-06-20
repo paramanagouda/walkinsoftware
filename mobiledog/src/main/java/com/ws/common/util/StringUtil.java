@@ -1,4 +1,4 @@
-package com.ws.spring.util;
+package com.ws.common.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

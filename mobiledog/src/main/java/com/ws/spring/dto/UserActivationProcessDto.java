@@ -1,8 +1,5 @@
 package com.ws.spring.dto;
 
-import java.util.List;
-import java.util.Set;
-
 public class UserActivationProcessDto {
 
 	private Long[] userIds;

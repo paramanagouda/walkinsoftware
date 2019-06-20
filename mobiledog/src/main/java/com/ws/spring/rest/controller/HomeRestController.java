@@ -18,15 +18,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.ws.common.util.ClientResponseUtil;
+import com.ws.common.util.Constants;
+import com.ws.common.util.StringUtil;
 import com.ws.spring.dto.UserActivationProcessDto;
 import com.ws.spring.dto.UserDto;
 import com.ws.spring.dto.UserOtpBean;
 import com.ws.spring.exception.ClientResponseBean;
 import com.ws.spring.model.UserDetails;
 import com.ws.spring.service.UserService;
-import com.ws.spring.util.ClientResponseUtil;
-import com.ws.spring.util.Constants;
-import com.ws.spring.util.StringUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -74,7 +74,6 @@ public class HomeRestController {
 		logger.debug("userRegistration for UserName : {}", user.getUserName());
 		try {
 			if (null == userService.verifyUserOtp(user.getMobileNumber(), user.getOtp())) {
-
 				return ClientResponseUtil.getUserOptValidationFailed();
 			}
 			UserDetails userRegistration = userService.userRegistration(user);
@@ -136,9 +135,9 @@ public class HomeRestController {
 
 	@GetMapping("/v1/verifyUserOtp")
 	public ClientResponseBean verifyUserOtp(@RequestBody UserDto userDto) {
-		logger.debug("verifyUserOtp Otp for userName : {} and opt : {}", userDto.getUsername(), userDto.getOtp());
+		logger.debug("verifyUserOtp Otp for userName : {} and opt : {}", userDto.getUserName(), userDto.getOtp());
 		try {
-			UserOtpBean userOptBean = userService.verifyUserOtp(userDto.getUsername(), userDto.getOtp());
+			UserOtpBean userOptBean = userService.verifyUserOtp(userDto.getUserName(), userDto.getOtp());
 			if (null != userOptBean) {
 				return ClientResponseUtil.getUserOptValidationSuccess();
 			}
@@ -179,7 +178,7 @@ public class HomeRestController {
 
 	@PostMapping("/v1/resetPassword")
 	public ClientResponseBean resetPassword(@RequestBody UserDto userDto) {
-		logger.debug("resetPassword for user : {}", userDto.getUsername());
+		logger.debug("resetPassword for user : {}", userDto.getUserName());
 		// verify Otp
 		try {
 			if (userService.resetPassword(userDto)) {
@@ -194,7 +193,7 @@ public class HomeRestController {
 
 	@PostMapping("/v1/changePassword")
 	public ClientResponseBean changePassword(@RequestBody UserDto userDto) {
-		logger.debug("changePassword for user : {}", userDto.getUsername());
+		logger.debug("changePassword for user : {}", userDto.getUserName());
 		try {
 			if (userService.changePassword(userDto)) {
 				return ClientResponseUtil.getSuccessResponse();
@@ -209,15 +208,15 @@ public class HomeRestController {
 	// Login with fingerprint option need to implement
 	@PostMapping("/v1/userLoginByPassword")
 	public ClientResponseBean userLoginByPassword(@RequestBody UserDto userDto) {
-		logger.debug("userLoginByPassword for user : {}", userDto.getUsername());
+		logger.debug("userLoginByPassword for user : {}", userDto.getUserName());
 		try {
 			logger.info("User login process : {}", userDto);
 			UserDetails userDetails = userService.userLogin(userDto, Constants.LOGIN_BY_PASSWORD);
 			if (null != userDetails) {
-				logger.info("User login process success : {}", userDto.getUsername());
+				logger.info("User login process success : {}", userDto.getUserName());
 				return ClientResponseUtil.userLoginSuccess();
 			}
-			logger.info("User login process failed : {}", userDto.getUsername());
+			logger.info("User login process failed : {}", userDto.getUserName());
 			return ClientResponseUtil.userLoginFailed();
 		} catch (Exception ex) {
 			logger.error("Exception Occure : {} ", ex.getMessage(), ex);
@@ -227,15 +226,15 @@ public class HomeRestController {
 
 	@PostMapping("/v1/userLoginByOtp")
 	public ClientResponseBean userLoginByOtp(@RequestBody UserDto userDto) {
-		logger.debug("userLoginByOtp for user : {}", userDto.getUsername());
+		logger.debug("userLoginByOtp for user : {}", userDto.getUserName());
 		try {
 			logger.info("User login process : {}", userDto);
 			UserDetails userDetails = userService.userLogin(userDto, Constants.LOGIN_BY_OTP);
 			if (null != userDetails) {
-				logger.info("User login process success : {}", userDto.getUsername());
+				logger.info("User login process success : {}", userDto.getUserName());
 				return ClientResponseUtil.userLoginSuccess();
 			}
-			logger.info("User login process failed : {}", userDto.getUsername());
+			logger.info("User login process failed : {}", userDto.getUserName());
 			return ClientResponseUtil.userLoginFailed();
 		} catch (Exception ex) {
 			logger.error("Exception Occure : {} ", ex.getMessage(), ex);
@@ -245,15 +244,15 @@ public class HomeRestController {
 
 	@PostMapping("/v1/userLoginMpin")
 	public ClientResponseBean userLoginMpin(@RequestBody UserDto userDto) {
-		logger.debug("userLoginMpin for user : {}", userDto.getUsername());
+		logger.debug("userLoginMpin for user : {}", userDto.getUserName());
 		try {
 			logger.info("User login process : {}", userDto);
 			UserDetails userDetails = userService.userLogin(userDto, Constants.LOGIN_BY_MPIN);
 			if (null != userDetails) {
-				logger.info("User login process success : {}", userDto.getUsername());
+				logger.info("User login process success : {}", userDto.getUserName());
 				return ClientResponseUtil.userLoginSuccess();
 			}
-			logger.warn("User login process failed : {}", userDto.getUsername());
+			logger.warn("User login process failed : {}", userDto.getUserName());
 			return ClientResponseUtil.userLoginFailed();
 		} catch (Exception ex) {
 			logger.error("Exception Occure : {} ", ex.getMessage(), ex);

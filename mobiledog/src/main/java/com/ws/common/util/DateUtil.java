@@ -1,4 +1,4 @@
-package com.ws.spring.util;
+package com.ws.common.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

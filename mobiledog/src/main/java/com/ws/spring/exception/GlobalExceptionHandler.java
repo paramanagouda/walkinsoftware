@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import com.ws.spring.util.ClientResponseUtil;
+import com.ws.common.util.ClientResponseUtil;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

@@ -10,7 +10,7 @@ public class UserDto implements Serializable {
 	 */
 	private static final long serialVersionUID = 4618329720480093775L;
 
-	private String username;
+	private String userName;
 	
 	private String mobileNumber;
 	
@@ -34,10 +34,10 @@ public class UserDto implements Serializable {
 		super();
 	}
 
-	public UserDto(String username, String mobileNumber, String emailId, String isOptVerified, String password,
+	public UserDto(String userName, String mobileNumber, String emailId, String isOptVerified, String password,
 			String currentPassword, String newPassword, String otp, String mpin, Date currentTime) {
 		super();
-		this.username = username;
+		this.userName = userName;
 		this.mobileNumber = mobileNumber;
 		this.emailId = emailId;
 		this.isOptVerified = isOptVerified;
@@ -52,17 +52,17 @@ public class UserDto implements Serializable {
 	@Override
 	public String toString() {
 		return String.format(
-				"UserDto [username=%s, mobileNumber=%s, emailId=%s, isOptVerified=%s, password=%s, currentPassword=%s, newPassword=%s, otp=%s, mpin=%s, currentTime=%s]",
-				username, mobileNumber, emailId, isOptVerified, password, currentPassword, newPassword, otp, mpin,
+				"UserDto [userName=%s, mobileNumber=%s, emailId=%s, isOptVerified=%s, password=%s, currentPassword=%s, newPassword=%s, otp=%s, mpin=%s, currentTime=%s]",
+				userName, mobileNumber, emailId, isOptVerified, password, currentPassword, newPassword, otp, mpin,
 				currentTime);
 	}
 
-	public String getUsername() {
-		return username;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getMobileNumber() {

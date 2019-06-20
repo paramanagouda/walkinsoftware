@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ws.spring.util;
+package com.ws.common.util;
 
 import java.util.Collection;
 import java.util.Iterator;

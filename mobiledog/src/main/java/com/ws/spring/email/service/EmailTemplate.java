@@ -5,12 +5,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Map;
 
-import com.ws.spring.util.AppUtil;
-import com.ws.spring.util.Constants;
+import com.ws.common.util.AppUtil;
+import com.ws.common.util.Constants;
 
 public class EmailTemplate {
-	
-
 
 	private String templateId;
 
