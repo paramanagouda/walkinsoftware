@@ -47,6 +47,7 @@ public class MdogApplication extends SpringBootServletInitializer implements App
 			dataSourceLookup.getDataSource("java:comp/env/jdbc/walkindbDS");
 			//JndiTemplate jndi = new JndiTemplate();
 			//dataSource = jndi.lookup("java:comp/env/jdbc/walkindbDS", DataSource.class);
+			logger.info("JDNI Datasource Connection success : jdbc/walkindbDS");
 		} catch (Exception e) {
 			logger.error("NamingException for java:comp/env/jdbc/yourname", e);
 		}

@@ -1,20 +1,28 @@
 package com.ws.spring.rest.controller;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.ws.common.util.ClientResponseUtil;
+import com.ws.spring.dto.SimRemovalDto;
 import com.ws.spring.exception.ClientResponseBean;
 import com.ws.spring.model.GpsTrackingDetails;
 import com.ws.spring.model.SimRemovalDetails;
@@ -37,11 +45,22 @@ public class GlobalPositionController {
 	GpsTrackingService gpsTrackingService;
 
 	@PostMapping("/v1/simremoval")
-	public ClientResponseBean simRemoval(@RequestBody SimRemovalDetails simRemovalDetails) {
-		SimRemovalDetails removalDetails = simRemovalDetailsService.insert(simRemovalDetails);
-		if (null != removalDetails) {
-			return ClientResponseUtil.getSuccessResponse();
+	public ClientResponseBean simRemoval(@ModelAttribute SimRemovalDto simRemovalDto) {
+		String mobileNumber = simRemovalDto.getMobileNumber();
+		logger.info("simRemoval mobilenumber : {}", mobileNumber);
+		SimRemovalDetails simRemovalDetails = new SimRemovalDetails();
+		BeanUtils.copyProperties(simRemovalDto, simRemovalDetails, "image");
+		MultipartFile image = simRemovalDto.getImage();
+		if (!image.isEmpty()) {
+			try {
+				byte[] bytes = image.getBytes();
+				simRemovalDetails.setImage(new SerialBlob(bytes));
+			} catch (IOException | SQLException e) {
+				logger.error("Exception occured while simremoval, mobileNumber : {}", mobileNumber, e);
+			}
 		}
+		if (null != simRemovalDetailsService.insert(simRemovalDetails))
+			return ClientResponseUtil.getSuccessResponse();
 		return ClientResponseUtil.getErrorResponse();
 	}
 

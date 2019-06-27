@@ -1,6 +1,7 @@
 package com.ws.spring.model;
 
 import java.io.Serializable;
+import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Date;
 
@@ -39,7 +40,7 @@ public class SimRemovalDetails implements Serializable {
 	@CreationTimestamp
 	private Date insertedDate;
 
-	private Clob image;
+	private Blob image;
 
 	public SimRemovalDetails() {
 		super();
@@ -93,11 +94,11 @@ public class SimRemovalDetails implements Serializable {
 		this.insertedDate = insertedDate;
 	}
 
-	public Clob getImage() {
+	public Blob getImage() {
 		return image;
 	}
 
-	public void setImage(Clob image) {
+	public void setImage(Blob image) {
 		this.image = image;
 	}
 
