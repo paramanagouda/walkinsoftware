@@ -82,8 +82,6 @@ public class EmailServiceImpl {
 		MimeMessage message = emailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 		helper.setTo(eParams.getTo().toArray(new String[eParams.getTo().size()]));
-		helper.setReplyTo(eParams.getFrom());
-		helper.setFrom(eParams.getFrom());
 		helper.setSubject(eParams.getSubject());
 		helper.setText(eParams.getMessage(), isHtml);
 
@@ -100,8 +98,6 @@ public class EmailServiceImpl {
 
 		eParams.getTo().toArray(new String[eParams.getTo().size()]);
 		mailMessage.setTo(eParams.getTo().toArray(new String[eParams.getTo().size()]));
-		mailMessage.setReplyTo(eParams.getFrom());
-		mailMessage.setFrom(eParams.getFrom());
 		mailMessage.setSubject(eParams.getSubject());
 		mailMessage.setText(eParams.getMessage());
 

@@ -47,7 +47,7 @@ public class GlobalPositionController {
 	@PostMapping("/v1/simremoval")
 	public ClientResponseBean simRemoval(@ModelAttribute SimRemovalDto simRemovalDto) {
 		String mobileNumber = simRemovalDto.getMobileNumber();
-		logger.info("simRemoval mobilenumber : {}", mobileNumber);
+		logger.info("simRemoval simRemovalDto details : {}", simRemovalDto);
 		SimRemovalDetails simRemovalDetails = new SimRemovalDetails();
 		BeanUtils.copyProperties(simRemovalDto, simRemovalDetails, "image");
 		MultipartFile image = simRemovalDto.getImage();

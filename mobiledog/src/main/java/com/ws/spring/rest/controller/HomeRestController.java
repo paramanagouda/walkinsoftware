@@ -135,9 +135,9 @@ public class HomeRestController {
 
 	@GetMapping("/v1/verifyUserOtp")
 	public ClientResponseBean verifyUserOtp(@RequestBody UserDto userDto) {
-		logger.debug("verifyUserOtp Otp for userName : {} and opt : {}", userDto.getUserName(), userDto.getOtp());
+		logger.debug("verifyUserOtp Otp for userName : {} and opt : {}", userDto.getUsername(), userDto.getOtp());
 		try {
-			UserOtpBean userOptBean = userService.verifyUserOtp(userDto.getUserName(), userDto.getOtp());
+			UserOtpBean userOptBean = userService.verifyUserOtp(userDto.getUsername(), userDto.getOtp());
 			if (null != userOptBean) {
 				return ClientResponseUtil.getUserOptValidationSuccess();
 			}
@@ -178,7 +178,7 @@ public class HomeRestController {
 
 	@PostMapping("/v1/resetPassword")
 	public ClientResponseBean resetPassword(@RequestBody UserDto userDto) {
-		logger.debug("resetPassword for user : {}", userDto.getUserName());
+		logger.debug("resetPassword for user : {}", userDto.getUsername());
 		// verify Otp
 		try {
 			if (userService.resetPassword(userDto)) {
@@ -193,7 +193,7 @@ public class HomeRestController {
 
 	@PostMapping("/v1/changePassword")
 	public ClientResponseBean changePassword(@RequestBody UserDto userDto) {
-		logger.debug("changePassword for user : {}", userDto.getUserName());
+		logger.debug("changePassword for user : {}", userDto.getUsername());
 		try {
 			if (userService.changePassword(userDto)) {
 				return ClientResponseUtil.getSuccessResponse();
@@ -208,15 +208,15 @@ public class HomeRestController {
 	// Login with fingerprint option need to implement
 	@PostMapping("/v1/userLoginByPassword")
 	public ClientResponseBean userLoginByPassword(@RequestBody UserDto userDto) {
-		logger.debug("userLoginByPassword for user : {}", userDto.getUserName());
+		logger.debug("userLoginByPassword for user : {}", userDto.getUsername());
 		try {
 			logger.info("User login process : {}", userDto);
 			UserDetails userDetails = userService.userLogin(userDto, Constants.LOGIN_BY_PASSWORD);
 			if (null != userDetails) {
-				logger.info("User login process success : {}", userDto.getUserName());
+				logger.info("User login process success : {}", userDto.getUsername());
 				return ClientResponseUtil.userLoginSuccess();
 			}
-			logger.info("User login process failed : {}", userDto.getUserName());
+			logger.info("User login process failed : {}", userDto.getUsername());
 			return ClientResponseUtil.userLoginFailed();
 		} catch (Exception ex) {
 			logger.error("Exception Occure : {} ", ex.getMessage(), ex);
@@ -226,15 +226,15 @@ public class HomeRestController {
 
 	@PostMapping("/v1/userLoginByOtp")
 	public ClientResponseBean userLoginByOtp(@RequestBody UserDto userDto) {
-		logger.debug("userLoginByOtp for user : {}", userDto.getUserName());
+		logger.debug("userLoginByOtp for user : {}", userDto.getUsername());
 		try {
 			logger.info("User login process : {}", userDto);
 			UserDetails userDetails = userService.userLogin(userDto, Constants.LOGIN_BY_OTP);
 			if (null != userDetails) {
-				logger.info("User login process success : {}", userDto.getUserName());
+				logger.info("User login process success : {}", userDto.getUsername());
 				return ClientResponseUtil.userLoginSuccess();
 			}
-			logger.info("User login process failed : {}", userDto.getUserName());
+			logger.info("User login process failed : {}", userDto.getUsername());
 			return ClientResponseUtil.userLoginFailed();
 		} catch (Exception ex) {
 			logger.error("Exception Occure : {} ", ex.getMessage(), ex);
@@ -243,16 +243,22 @@ public class HomeRestController {
 	}
 
 	@PostMapping("/v1/userLoginMpin")
+	@ApiOperation(value = "User Login using Pin", response = ClientResponseBean.class)
+	@ApiParam(required = true, value = "username")
+	@ApiResponses(value = { @ApiResponse(code = 1000, message= "User Login success."),
+			@ApiResponse(code = 1001, message= "User Login Failed."),
+		@ApiResponse(code = 500, message = "Internal Server Error"),
+			})
 	public ClientResponseBean userLoginMpin(@RequestBody UserDto userDto) {
-		logger.debug("userLoginMpin for user : {}", userDto.getUserName());
+		logger.debug("userLoginMpin for user : {}", userDto.getUsername());
 		try {
-			logger.info("User login process : {}", userDto);
+			logger.info("User MPIN login process : {}", userDto);
 			UserDetails userDetails = userService.userLogin(userDto, Constants.LOGIN_BY_MPIN);
 			if (null != userDetails) {
-				logger.info("User login process success : {}", userDto.getUserName());
+				logger.info("User login process success : {}", userDto.getUsername());
 				return ClientResponseUtil.userLoginSuccess();
 			}
-			logger.warn("User login process failed : {}", userDto.getUserName());
+			logger.warn("User login process failed : {}", userDto.getUsername());
 			return ClientResponseUtil.userLoginFailed();
 		} catch (Exception ex) {
 			logger.error("Exception Occure : {} ", ex.getMessage(), ex);
@@ -279,5 +285,23 @@ public class HomeRestController {
 		} catch (Exception ex) {
 			throw new ResponseStatusException(HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS, "Exception Occured ", ex);
 		}
+	}
+
+	@ApiOperation(value = "Query User Profile", response = UserDetails.class)
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Internal Server Error") })
+	@GetMapping("/v1/getUserProfile")
+	public UserDetails getUserProfile(@RequestParam("userName") String userName) {
+
+		UserDetails userDetails = userService.queryLoginUserDetails(userName);
+		
+		return userDetails;
+	}
+
+	@ApiOperation(value = "Update User Profile", response = ClientResponseBean.class)
+	@ApiResponses(value = { @ApiResponse(code = 1000, message = "User profile updated"),
+			@ApiResponse(code = 500, message = "Internal Server Error") })
+	@PostMapping("/v1/updateUserProfile")
+	public ClientResponseBean updateUserProfile(@RequestBody UserDetails userDetails) {
+		return ClientResponseUtil.getSuccessResponse();
 	}
 }

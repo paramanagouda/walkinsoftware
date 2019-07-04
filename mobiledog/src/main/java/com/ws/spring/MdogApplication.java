@@ -1,7 +1,8 @@
 package com.ws.spring;
 
+import java.util.Date;
+
 import javax.annotation.Resource;
-import javax.sql.DataSource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,8 +27,8 @@ import com.ws.spring.email.service.EmailServiceImpl;
 @EnableJpaAuditing
 @Configuration
 @EnableJdbcHttpSession
-@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
-@Resource(name="jdbc/walkindbDS", type=javax.sql.DataSource.class,  lookup="jdbc/walkindbDS")
+@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class })
+@Resource(name = "jdbc/walkindbDS", type = javax.sql.DataSource.class, lookup = "jdbc/walkindbDS")
 public class MdogApplication extends SpringBootServletInitializer implements ApplicationRunner {
 
 	Logger logger = LogManager.getLogger(this.getClass().getName());
@@ -45,8 +46,8 @@ public class MdogApplication extends SpringBootServletInitializer implements App
 		try {
 			JndiDataSourceLookup dataSourceLookup = new JndiDataSourceLookup();
 			dataSourceLookup.getDataSource("java:comp/env/jdbc/walkindbDS");
-			//JndiTemplate jndi = new JndiTemplate();
-			//dataSource = jndi.lookup("java:comp/env/jdbc/walkindbDS", DataSource.class);
+			// JndiTemplate jndi = new JndiTemplate();
+			// dataSource = jndi.lookup("java:comp/env/jdbc/walkindbDS", DataSource.class);
 			logger.info("JDNI Datasource Connection success : jdbc/walkindbDS");
 		} catch (Exception e) {
 			logger.error("NamingException for java:comp/env/jdbc/yourname", e);
@@ -61,14 +62,11 @@ public class MdogApplication extends SpringBootServletInitializer implements App
 
 	@Override
 	public void run(ApplicationArguments applicationArguments) {
-		logger.debug("Debugging log");
-		logger.info("Info log");
-		logger.warn("Hey, This is a warning!");
-		logger.error("Oops! We have an Error. OK");
-		logger.fatal("Damn! Fatal error. Please fix me.");
+		logger.info("1 Application started without any error Date : {}", new Date());
+		logger.info("2 Application started without any error Date : {}", new Date());
 		try {
-			// emailServiceImpl.sendMail("paramanagowda.patil@gmail.com", "Test Mdog App
-			// Mail", "Test Mdog App Mail");
+			logger.warn(emailServiceImpl.sendMail("paramanagowda.patil@gmail.com", "Test Mdog App Mail",
+					"Test Mdog App Mail"));
 
 		} catch (Exception e) {
 			logger.error("SendSms got an error : {},", e.getMessage(), e);
@@ -90,4 +88,5 @@ public class MdogApplication extends SpringBootServletInitializer implements App
 	 * 
 	 * return mailSender; }
 	 */
+
 }

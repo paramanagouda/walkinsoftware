@@ -45,8 +45,7 @@ public class AppMailSender {
 
 			String message = resistrationConformationEmailTemplate.getTemplate(replacements);
 
-			EmailBean email = new EmailBean("WALKIN-SOFTWARE", userDetails.getEmailId(),
-					"User Registration Confiration", message);
+			EmailBean email = new EmailBean(userDetails.getEmailId(), "User Registration Confiration", message);
 			email.setHtml(true);
 			emailServiceImpl.send(email);
 			logger.info("User {} RegistrationCOnfiration mail Sending process End.", userDetails.getUserName());
@@ -75,7 +74,7 @@ public class AppMailSender {
 
 			String message = optVerificationEmailTemplate.getTemplate(replacements);
 
-			EmailBean email = new EmailBean("WALKIN-SOFTWARE", userOptBean.getEmailId(), userOptBean.getMobileNumber(),
+			EmailBean email = new EmailBean(userOptBean.getEmailId(), userOptBean.getMobileNumber(),
 					"User OTP Verification", message);
 			email.setHtml(true);
 			emailServiceImpl.send(email);
@@ -97,8 +96,7 @@ public class AppMailSender {
 
 			String message = changePasswordEmailTemplate.getTemplate(replacements);
 
-			EmailBean email = new EmailBean("WALKIN-SOFTWARE", userDetails.getEmailId(), "User OTP Verification",
-					message);
+			EmailBean email = new EmailBean(userDetails.getEmailId(), "User OTP Verification", message);
 			email.setHtml(true);
 			emailServiceImpl.send(email);
 			logger.info("User {} change password mail Sending process End.", userDetails.getUserName());

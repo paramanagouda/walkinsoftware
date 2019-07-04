@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ws.app.cachedata.CacheData;
 import com.ws.common.util.Constants;
@@ -46,6 +47,8 @@ public class UserService implements Constants {
 		Role role = new Role(4L, "User");
 		userDetails.setRole(role);
 		userDetails.setIsActive(REGISTERED);
+		userDetails.setGpsTracking(Boolean.TRUE);
+		userDetails.setEmergency(Boolean.TRUE);
 		// String encrypt = AESAlgorithm.encrypt(userDetails.getUserName() + "-" +
 		// userDetails.getEmailId(),userDetails.getUserName());
 		// userDetails.setHashcode(encrypt);
@@ -73,7 +76,6 @@ public class UserService implements Constants {
 
 	@Transactional(readOnly = true)
 	public UserOtpBean sendOtp(UserOtpBean userOtpBean) {
-
 		String userName = userOtpBean.getUserName();
 		if (StringUtil.checkNullOrEmpty(userName)) {
 			userName = userOtpBean.getEmailId();
@@ -83,41 +85,58 @@ public class UserService implements Constants {
 		}
 		UserDetails userDetailsFromDb = userRepository.queryLoginUserDetails(userName);
 		if (null != userDetailsFromDb) {
+			userOtpBean.setUserName(userDetailsFromDb.getUserName());
+			userOtpBean.setMobileNumber(userDetailsFromDb.getMobileNumber());
+			userOtpBean.setEmailId(userDetailsFromDb.getEmailId());
 			generateOpt(userOtpBean);
 			return userOtpBean;
 		}
 		return null;
 	}
 
+	@Transactional(readOnly = true)
+	public UserDetails queryLoginUserDetails(String userName) {
+		return userRepository.queryLoginUserDetails(userName);
+	}
+
 	public UserOtpBean generateOpt(UserOtpBean userOtpBean) {
 		String generateRandomNumber = StringUtil.generateRandomNumber(Constants.INT_SIX);
-		logger.info("User Otp genearated for Mobile Number : {}, Otp : {}", userOtpBean.getMobileNumber(),
-				generateRandomNumber);
+		String mobileNumber = userOtpBean.getMobileNumber();
+		logger.info("User Otp genearated for Mobile Number : {}, Otp : {}", mobileNumber, generateRandomNumber);
 		// Send opt through email and SMS
 		userOtpBean.setOtp(generateRandomNumber);
 		userOtpBean.setGeneratedTime(new Date());
-		CacheData.getOtpGeneratedUserList().add(userOtpBean);
+
+		CacheData.addToCache(userOtpBean);
 		try {
 			appSmsSender.sendUserOtp(userOtpBean);
 		} catch (Exception e) {
-			logger.error("Exception occure : {} ", e.getMessage(), e);
+			logger.error("Exception occure at generateOtp : {} ", mobileNumber, e.getMessage(), e);
 			return null;
 		}
 		return userOtpBean;
 	}
 
-	public UserOtpBean verifyUserOtp(String userName, String otp) {
+	public UserOtpBean verifyUserOtp(String mobileNumber, String otp) {
 		if ("patil".equals(otp)) {
 			return new UserOtpBean();
 		}
-		for (UserOtpBean userOtpBean : CacheData.getOtpGeneratedUserList()) {
-			if (userName.equals(userOtpBean.getUserName()) || userName.equals(userOtpBean.getEmailId())
-					|| userName.equals(userOtpBean.getMobileNumber()) & otp.equals(userOtpBean.getOtp())) {
-				// Remove User Details from cache once verification done
-				CacheData.getOtpGeneratedUserList().remove(userOtpBean);
-				return userOtpBean;
-			}
+		UserOtpBean userOtpBean = CacheData.getUserOtpBean(mobileNumber);
+		if (otp.equals(userOtpBean.getOtp())) {
+			CacheData.removeFromCache(userOtpBean);
+			return userOtpBean;
 		}
+		logger.warn("Otp verification failed for mobileNumber : {}", mobileNumber);
+
+		/*
+		 * for (UserOtpBean userOtpBean : CacheData.getOtpGeneratedUserList()) { if
+		 * (userName.equals(userOtpBean.getUserName()) ||
+		 * userName.equals(userOtpBean.getEmailId()) ||
+		 * userName.equals(userOtpBean.getMobileNumber()) &
+		 * otp.equals(userOtpBean.getOtp())) { // Remove User Details from cache once
+		 * verification done CacheData.getOtpGeneratedUserList().remove(userOtpBean);
+		 * return userOtpBean; } }
+		 */
 		return null;
 	}
 
@@ -136,7 +155,7 @@ public class UserService implements Constants {
 	}
 
 	public boolean resetPassword(UserDto userDto) {
-		UserDetails userDetailsFromDb = userRepository.queryLoginUserDetails(userDto.getUserName());
+		UserDetails userDetailsFromDb = userRepository.queryLoginUserDetails(userDto.getUsername());
 		if (null != userDetailsFromDb) {
 			userDetailsFromDb.setPassword(userDto.getNewPassword());
 			// userDetailsFromDb.setUpdatedDate(DateUtil.convertToLocalDateTimeViaInstant(userDto.getCurrentTime()));
@@ -149,7 +168,7 @@ public class UserService implements Constants {
 	}
 
 	public boolean changePassword(UserDto userDto) {
-		UserDetails userDetailsFromDb = userRepository.queryLoginUserDetails(userDto.getUserName());
+		UserDetails userDetailsFromDb = userRepository.queryLoginUserDetails(userDto.getUsername());
 		if (null != userDetailsFromDb) {
 			if (userDetailsFromDb.getPassword().equals(userDto.getCurrentPassword())) {
 				userDetailsFromDb.setPassword(userDto.getNewPassword());
@@ -166,13 +185,17 @@ public class UserService implements Constants {
 	public UserDetails userLogin(UserDto userDto, String loginType) {
 
 		UserDetails userDetailsFromDb;
+		String userName = userDto.getUsername();
+		if (StringUtil.checkNullOrEmpty(userName)) {
+			userName = userDto.getMobileNumber();
+		}
 		if (LOGIN_BY_OTP.equals(loginType)) {
 			String otp = userDto.getOtp();
 			// Verify User By Otp
-			if (null == verifyUserOtp(userDto.getUserName(), otp))
+			if (null == verifyUserOtp(userName, otp))
 				return null;
 		}
-		userDetailsFromDb = userRepository.queryLoginUserDetails(userDto.getUserName());
+		userDetailsFromDb = userRepository.queryLoginUserDetails(userName);
 		if (null != userDetailsFromDb) {
 			if (LOGIN_BY_MPIN.equals(loginType)) {
 				// Verify User By Mpin
@@ -192,10 +215,10 @@ public class UserService implements Constants {
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUserName(UserDto userDto) {
 		// ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
-		if (userDto.getUserName().length() < 6 || userDto.getUserName().length() > 32) {
+		if (userDto.getUsername().length() < 6 || userDto.getUsername().length() > 32) {
 			// errors.rejectValue("username", "Size.userForm.username");
 		}
-		UserDetails userDetails = userRepository.findUserDetailsByUserName(userDto.getUserName());
+		UserDetails userDetails = userRepository.findUserDetailsByUserName(userDto.getUsername());
 		if (userDetails != null) {
 			// errors.rejectValue("username", "Duplicate.userForm.username");
 		}
@@ -237,5 +260,9 @@ public class UserService implements Constants {
 	public List<UserDetails> queryUserDetailsByUserNameOrMobile(String userName, String mobileNumber) {
 		List<UserDetails> userList = userRepository.queryUserDetailsByUserNameOrMobile(userName, mobileNumber);
 		return userList;
+	}
+
+	public void updateUserProfile(@RequestBody UserDetails userDetails) {
+		userRepository.save(userDetails);
 	}
 }

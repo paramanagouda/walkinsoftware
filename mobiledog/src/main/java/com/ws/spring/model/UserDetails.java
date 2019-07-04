@@ -14,6 +14,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -40,6 +43,7 @@ public class UserDetails implements Serializable {
 	@ApiModelProperty(notes = "The user Name used for login")
 	private String userName;
 
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
 	@ApiModelProperty(notes = "The employee email id")
@@ -51,7 +55,7 @@ public class UserDetails implements Serializable {
 
 	private String mpin;
 
-	// Bar code will be contain more info
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String barcode;
 
 	private String secondaryMobileNumber;
@@ -68,6 +72,10 @@ public class UserDetails implements Serializable {
 	private String reason;
 
 	private String imeiNum;
+	
+	private Boolean gpsTracking;
+	
+	private Boolean emergency;
 
 	@CreationTimestamp
 	private LocalDateTime insertedDate;
@@ -79,11 +87,11 @@ public class UserDetails implements Serializable {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	public UserDetails(Long id, String fullName, String userName, String password, String emailId, String mobileNumber,
 			String otp, String mpin, String barcode, String secondaryMobileNumber, Role role, int isActive,
-			int approveStatus, Long approvedBy, String reason, String imeiNum, LocalDateTime insertedDate,
-			LocalDateTime updatedDate) {
+			int approveStatus, Long approvedBy, String reason, String imeiNum, Boolean gpsTracking, Boolean emergency,
+			LocalDateTime insertedDate, LocalDateTime updatedDate) {
 		super();
 		this.id = id;
 		this.fullName = fullName;
@@ -101,16 +109,21 @@ public class UserDetails implements Serializable {
 		this.approvedBy = approvedBy;
 		this.reason = reason;
 		this.imeiNum = imeiNum;
+		this.gpsTracking = gpsTracking;
+		this.emergency = emergency;
 		this.insertedDate = insertedDate;
 		this.updatedDate = updatedDate;
 	}
 
+
 	@Override
 	public String toString() {
-		return String.format(
-				"UserDetails [id=%s, fullName=%s, userName=%s, password=%s, emailId=%s, mobileNumber=%s, otp=%s, mpin=%s barcode=%s, secondaryMobileNumber=%s, role=%s, isActive=%s, approveStatus=%s, approvedBy=%s, reason=%s, imeiNum=%s, insertedDate=%s, updatedDate=%s]",
-				id, fullName, userName, password, emailId, mobileNumber, otp, mpin, barcode, secondaryMobileNumber,
-				role, isActive, approveStatus, approvedBy, reason, imeiNum, insertedDate, updatedDate);
+		return "UserDetails [id=" + id + ", fullName=" + fullName + ", userName=" + userName + ", password=" + password
+				+ ", emailId=" + emailId + ", mobileNumber=" + mobileNumber + ", otp=" + otp + ", mpin=" + mpin
+				+ ", barcode=" + barcode + ", secondaryMobileNumber=" + secondaryMobileNumber + ", role=" + role
+				+ ", isActive=" + isActive + ", approveStatus=" + approveStatus + ", approvedBy=" + approvedBy
+				+ ", reason=" + reason + ", imeiNum=" + imeiNum + ", gpsTracking=" + gpsTracking + ", emergency="
+				+ emergency + ", insertedDate=" + insertedDate + ", updatedDate=" + updatedDate + "]";
 	}
 
 	public Long getId() {
@@ -241,6 +254,22 @@ public class UserDetails implements Serializable {
 		this.imeiNum = imeiNum;
 	}
 
+	public Boolean getGpsTracking() {
+		return gpsTracking;
+	}
+
+	public void setGpsTracking(Boolean gpsTracking) {
+		this.gpsTracking = gpsTracking;
+	}
+
+	public Boolean getEmergency() {
+		return emergency;
+	}
+
+	public void setEmergency(Boolean emergency) {
+		this.emergency = emergency;
+	}
+
 	public LocalDateTime getInsertedDate() {
 		return insertedDate;
 	}
@@ -257,4 +286,5 @@ public class UserDetails implements Serializable {
 		this.updatedDate = updatedDate;
 	}
 
+	
 }

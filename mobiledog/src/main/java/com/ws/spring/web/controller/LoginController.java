@@ -40,6 +40,7 @@ public class LoginController {
 		return "index";
 	}
 
+	@SuppressWarnings("unchecked")
 	@PostMapping("/loginByPassword")
 	public String userLoginByPassword(Model model, @RequestParam String userName, @RequestParam String password,
 			HttpServletRequest request) {
@@ -55,7 +56,7 @@ public class LoginController {
 		}
 		userSession.add(userName);
 		UserDto userDto = new UserDto();
-		userDto.setUserName(userName);
+		userDto.setUsername(userName);
 		userDto.setPassword(password);
 		UserDetails userDetails = userService.userLogin(userDto, Constants.LOGIN_BY_PASSWORD);
 		if (null == userDetails) {

@@ -8,8 +8,6 @@ import com.ws.common.util.AppUtil;
 
 public class EmailBean {
 	
-	private String from;
-
 	private List<String> to;
 
 	private List<String> cc;
@@ -25,36 +23,19 @@ public class EmailBean {
 		this.cc = new ArrayList<String>();
 	}
 
-	public EmailBean(String from, String toList, String subject, String message) {
+	public EmailBean(String toList, String subject, String message) {
 		this();
-		this.from = from;
 		this.subject = subject;
 		this.message = message;
 		this.to.addAll(Arrays.asList(splitByComma(toList)));
 	}
 
-	public EmailBean(String from, String toList, String ccList, String subject, String message) {
+	public EmailBean(String toList, String ccList, String subject, String message) {
 		this();
-		this.from = from;
 		this.subject = subject;
 		this.message = message;
 		this.to.addAll(Arrays.asList(splitByComma(toList)));
 		this.cc.addAll(Arrays.asList(splitByComma(ccList)));
-	}
-
-	/**
-	 * @return the from
-	 */
-	public String getFrom() {
-		return from;
-	}
-
-	/**
-	 * @param from
-	 *            the from to set
-	 */
-	public void setFrom(String from) {
-		this.from = from;
 	}
 
 	/**

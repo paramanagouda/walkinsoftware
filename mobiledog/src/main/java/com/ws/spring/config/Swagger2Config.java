@@ -29,9 +29,9 @@ public class Swagger2Config {
 	}
 
 	private ApiInfo apiEndPointsInfo() {
-		return new ApiInfoBuilder().title("Mobiledog app REST API").description("User Management REST API")
+		return new ApiInfoBuilder().title("Mobiledog app REST API").description("User Management REST API").termsOfServiceUrl("https://mobiledog.in")
 				.contact(new Contact("Ramesh Patil", "www.mobiledog.in", "supporttest@mobiledog.in"))
-				.license("Apache 2.0").licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html").version("1.0.0")
+				.license("walkinsoftware.in").licenseUrl("www.walkinsoftware.in").version("1.0.0")
 				.build();
 	}
 
